@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTA-Style Driving</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { background: #000; overflow: hidden; }
+    canvas { display: block; }
+
+    #hud {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      font-family: 'Courier New', monospace;
+    }
+
+    #speedometer {
+      position: absolute;
+      bottom: 32px;
+      right: 36px;
+      font-size: 28px;
+      font-weight: bold;
+      color: #fff;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9), 2px 2px 4px #000;
+    }
+
+    #gear-display {
+      position: absolute;
+      bottom: 32px;
+      right: 130px;
+      font-size: 26px;
+      font-weight: bold;
+      color: #FFCC44;
+      text-shadow: 0 0 8px rgba(0,0,0,0.9), 2px 2px 4px #000;
+    }
+
+    #controls {
+      position: absolute;
+      bottom: 24px;
+      left: 24px;
+      font-size: 12px;
+      color: rgba(255,255,255,0.65);
+      line-height: 1.7;
+      text-shadow: 1px 1px 3px #000;
+    }
+
+    #click-hint {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      color: rgba(255,255,255,0.8);
+      font-size: 16px;
+      text-shadow: 1px 1px 4px #000;
+      background: rgba(0,0,0,0.45);
+      padding: 10px 20px;
+      border-radius: 6px;
+      transition: opacity 0.4s;
+    }
+  </style>
+</head>
+<body>
+  <div id="hud">
+    <div id="speedometer">0 km/h</div>
+    <div id="gear-display">D</div>
+    <div id="controls">
+      WASD / Arrows — Drive<br>
+      SHIFT / Space — Handbrake drift<br>
+      Click — Mouse look (pointer lock)
+    </div>
+    <div id="click-hint">Click to enable mouse look</div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="src/Physics.js"></script>
+  <script src="src/Player.js"></script>
+  <script src="src/Vehicle.js"></script>
+  <script src="src/World.js"></script>
+  <script src="src/Camera.js"></script>
+  <script src="src/main.js"></script>
+
+  <script>
+    // Hide hint once pointer is locked
+    document.addEventListener('pointerlockchange', () => {
+      const hint = document.getElementById('click-hint');
+      if (hint) hint.style.opacity = document.pointerLockElement ? '0' : '1';
+    });
+  </script>
+</body>
+</html>
