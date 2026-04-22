@@ -93,7 +93,7 @@ class World {
           const bh = minH + rng() * (maxH - minH);
 
           const color = palette[Math.floor(rng() * palette.length)];
-          const mat = new THREE.MeshLambertMaterial({ color, flatShading: true });
+          const mat = new THREE.MeshPhongMaterial({ color, flatShading: true });
           const mesh = new THREE.Mesh(new THREE.BoxGeometry(bw, bh, bd), mat);
           mesh.position.set(bx, bh / 2 + 0.01, bz);
           this.scene.add(mesh);
