@@ -64,7 +64,7 @@ async function init() {
 
   // Load GLB car — silently falls back to box car if file missing
   new THREE.GLTFLoader().load(
-    'assets/car4.glb',
+    'assets/Car4.glb',
     gltf => vehicle.setModel(gltf.scene),
     undefined,
     () => console.warn('assets/car4.glb not found — using placeholder car')
