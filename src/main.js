@@ -62,13 +62,16 @@ async function init() {
     renderer.setSize(window.innerWidth, window.innerHeight);
   });
 
-  // Load GLB car — silently falls back to box car if file missing
-  new THREE.GLTFLoader().load(
-    'assets/Car4.glb',
-    gltf => vehicle.setModel(gltf.scene),
-    undefined,
-    () => console.warn('assets/car4.glb not found — using placeholder car')
-  );
+  // Load OBJ car with MTL materials and PNG textures
+  const mtlLoader = new THREE.MTLLoader();
+  mtlLoader.setPath('assets/');
+  mtlLoader.load('Car4.mtl', materials => {
+    materials.preload();
+    const objLoader = new THREE.OBJLoader();
+    objLoader.setMaterials(materials);
+    objLoader.setPath('assets/');
+    objLoader.load('Car4.obj', obj => vehicle.setModel(obj));
+  });
 
   // UI elements
   const speedEl   = document.getElementById('speedometer');
