@@ -42,9 +42,10 @@ class Character {
     const size = box.getSize(new THREE.Vector3());
     model.scale.setScalar(1.8 / size.y);
 
-    // Sit on ground
+    // Sit on ground, face correct direction
     box.setFromObject(model);
     model.position.y = -box.min.y;
+    model.rotation.y = Math.PI;
 
     this.mesh.add(model);
 
@@ -105,10 +106,12 @@ class Character {
     if (len > 0.001) {
       dx /= len; dz /= len;
       this.angle = Math.atan2(-dx, -dz);
-      this._playClip('walk');
+      const running = !!input.handbrake;
+      const speed   = running ? 9.0 : 5.0;
+      this._playClip(running ? 'run' : 'walk');
 
-      const nx = this.position.x + dx * 5.0 * dt;
-      const nz = this.position.z + dz * 5.0 * dt;
+      const nx = this.position.x + dx * speed * dt;
+      const nz = this.position.z + dz * speed * dt;
       const push = this.physics.resolve(nx, nz, this.angle, this.halfW, this.halfL);
       if (push) { this.position.x = nx + push.x; this.position.z = nz + push.z; }
       else      { this.position.x = nx;           this.position.z = nz; }
