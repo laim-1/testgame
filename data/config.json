@@ -16,6 +16,7 @@
     "steeringSpeed": 1.75,
     "rollingFriction": 0.25,
     "lateralFriction": 24,
+    "handbrakeBraking": 22,
     "handbrakeLateralFriction": 1.2,
     "oversteerKick": 0.18
   },

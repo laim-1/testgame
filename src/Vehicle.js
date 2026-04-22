@@ -138,6 +138,11 @@ class Vehicle {
     const latFric = input.handbrake ? cfg.handbrakeLateralFriction : cfg.lateralFriction;
     lv *= Math.exp(-latFric * dt);
 
+    // Handbrake also brakes forward speed (locks rear wheels)
+    if (input.handbrake && fv > 0.3) {
+      fv -= cfg.handbrakeBraking * dt;
+    }
+
     // Oversteer kick: handbrake + turning pushes the rear out
     if (input.handbrake && speed > 4) {
       lv += this.angVel * speed * cfg.oversteerKick * dt;
