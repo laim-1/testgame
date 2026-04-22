@@ -32,7 +32,9 @@ async function init() {
   const sun = new THREE.DirectionalLight(0xFFEECC, 1.0);
   sun.position.set(150, 200, 80);
   scene.add(sun);
-  scene.add(Object.assign(new THREE.DirectionalLight(0x8899CC, 0.25), { position: new THREE.Vector3(-100, 50, -100) }));
+  const fill = new THREE.DirectionalLight(0x8899CC, 0.25);
+  fill.position.set(-100, 50, -100);
+  scene.add(fill);
 
   // Systems
   const physics   = new Physics();
