@@ -68,9 +68,10 @@ async function init() {
     const rz = vehicle.position.z - Math.sin(vehicle.angle) * 3;
     character.spawn(rx, rz, vehicle.angle);
     // Camera: lower, closer for on-foot
-    gameCam.dist   = 8;
-    gameCam.height = 3.5;
-    gameCam.yawOffset = 0;
+    gameCam.dist      = 8;
+    gameCam.height    = 3.5;
+    // Seed yawOffset with current world camera angle so there's no snap
+    gameCam.yawOffset = gameCam.yaw;
     state = 'onFoot';
   }
 
@@ -127,7 +128,7 @@ async function init() {
 
     if (state === 'driving') {
       forwardVel = vehicle.update(physics, player.keys, dt);
-      gameCam.update(vehicle, dt);
+      gameCam.update(vehicle, dt, true);
 
       const kmh = Math.round(Math.abs(forwardVel) * 3.6);
       speedEl.textContent = kmh + ' km/h';
@@ -136,7 +137,7 @@ async function init() {
 
     } else {
       character.update(player.keys, gameCam.yaw, dt);
-      gameCam.update(character, dt);
+      gameCam.update(character, dt, false);
 
       speedEl.textContent = '';
       gearEl.textContent  = '';

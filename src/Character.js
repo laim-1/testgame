@@ -7,24 +7,34 @@ class Character {
     this.halfW    = 0.28;
     this.halfL    = 0.28;
 
-    this.mixer       = null;
-    this.clips       = {};   // name → AnimationAction
-    this.activeClip  = null;
-    this.loaded      = false;
+    this.mixer      = null;
+    this.clips      = {};
+    this.activeClip = null;
 
     this.mesh = new THREE.Group();
     this.mesh.visible = false;
     scene.add(this.mesh);
 
+    // Blue box placeholder — visible immediately while GLB loads
+    this._placeholder = new THREE.Mesh(
+      new THREE.BoxGeometry(0.5, 1.6, 0.3),
+      new THREE.MeshLambertMaterial({ color: 0x4488FF })
+    );
+    this._placeholder.position.y = 0.8;
+    this.mesh.add(this._placeholder);
+
     new THREE.GLTFLoader().load(
       'assets/Man.glb',
       gltf => this._onLoad(gltf),
       undefined,
-      err => console.warn('Man.glb failed to load:', err)
+      err => console.warn('Man.glb failed:', err)
     );
   }
 
   _onLoad(gltf) {
+    // Remove placeholder
+    this.mesh.remove(this._placeholder);
+
     const model = gltf.scene;
 
     // Scale to ~1.8 units tall
@@ -37,9 +47,8 @@ class Character {
     model.position.y = -box.min.y;
 
     this.mesh.add(model);
-    this.loaded = true;
 
-    // Animations
+    // Set up animations
     if (gltf.animations && gltf.animations.length > 0) {
       this.mixer = new THREE.AnimationMixer(model);
       gltf.animations.forEach(clip => {
@@ -53,7 +62,6 @@ class Character {
   }
 
   _playClip(name) {
-    // Fuzzy match: 'walk' matches 'Walking', 'walk_forward', etc.
     const key = Object.keys(this.clips).find(k => k.includes(name))
              ?? Object.keys(this.clips)[0];
     if (!key) return;
@@ -81,8 +89,6 @@ class Character {
   update(input, camYaw, dt) {
     if (!this.mesh.visible) return;
 
-    // WASD movement relative to camera direction
-    // Camera sits at +camYaw offset from player, so forward = -camYaw direction
     const fwdX = -Math.sin(camYaw);
     const fwdZ = -Math.cos(camYaw);
     const rgtX =  Math.cos(camYaw);
@@ -95,15 +101,14 @@ class Character {
     if (input.right) { dx += rgtX; dz += rgtZ; }
 
     const len = Math.sqrt(dx * dx + dz * dz);
-    const walkSpeed = 5.0;
 
     if (len > 0.001) {
       dx /= len; dz /= len;
       this.angle = Math.atan2(-dx, -dz);
       this._playClip('walk');
 
-      const nx = this.position.x + dx * walkSpeed * dt;
-      const nz = this.position.z + dz * walkSpeed * dt;
+      const nx = this.position.x + dx * 5.0 * dt;
+      const nz = this.position.z + dz * 5.0 * dt;
       const push = this.physics.resolve(nx, nz, this.angle, this.halfW, this.halfL);
       if (push) { this.position.x = nx + push.x; this.position.z = nz + push.z; }
       else      { this.position.x = nx;           this.position.z = nz; }
@@ -113,7 +118,6 @@ class Character {
 
     this.mesh.position.set(this.position.x, 0, this.position.z);
     this.mesh.rotation.y = this.angle;
-
     if (this.mixer) this.mixer.update(dt);
   }
 }
