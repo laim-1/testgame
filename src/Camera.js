@@ -26,18 +26,24 @@ class GameCamera {
     this.lastMouseMs = performance.now();
   }
 
-  update(vehicle, dt) {
+  get yaw() {
+    return this._lastYaw || 0;
+  }
+
+  update(target, dt) {
+    const vehicle = target;
     // Slowly return camera behind car when mouse idle
     const idle = (performance.now() - this.lastMouseMs) / 1000;
     if (idle > 1.8) {
       this.yawOffset *= Math.exp(-2.5 * dt);
     }
 
-    const camYaw = vehicle.angle + this.yawOffset;
+    const camYaw = target.angle + this.yawOffset;
+    this._lastYaw = camYaw;
 
-    const tx = vehicle.position.x + Math.sin(camYaw) * this.dist;
-    const ty = vehicle.position.y + this.height + Math.sin(this.pitch) * this.dist * 0.45;
-    const tz = vehicle.position.z + Math.cos(camYaw) * this.dist;
+    const tx = target.position.x + Math.sin(camYaw) * this.dist;
+    const ty = target.position.y + this.height + Math.sin(this.pitch) * this.dist * 0.45;
+    const tz = target.position.z + Math.cos(camYaw) * this.dist;
 
     const t = Math.min(this.smooth * dt, 1);
     this.pos.x += (tx - this.pos.x) * t;
@@ -46,10 +52,9 @@ class GameCamera {
 
     this.cam.position.copy(this.pos);
 
-    // Look slightly ahead of car
     const la = 2.5;
-    const lx = vehicle.position.x - Math.sin(vehicle.angle) * la;
-    const lz = vehicle.position.z - Math.cos(vehicle.angle) * la;
-    this.cam.lookAt(lx, vehicle.position.y + 1.4, lz);
+    const lx = target.position.x - Math.sin(target.angle) * la;
+    const lz = target.position.z - Math.cos(target.angle) * la;
+    this.cam.lookAt(lx, target.position.y + this.height * 0.25, lz);
   }
 }
