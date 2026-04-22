@@ -20,7 +20,7 @@ class GameCamera {
   }
 
   onMouseMove(dx, dy) {
-    this.yawOffset += dx * this.sensitivity;
+    this.yawOffset -= dx * this.sensitivity;
     this.pitch     -= dy * this.sensitivity;
     this.pitch = Math.max(0.05, Math.min(0.75, this.pitch));
     this.lastMouseMs = performance.now();

@@ -12,10 +12,10 @@
     "reverseMaxSpeed": 10,
     "acceleration": 22,
     "braking": 35,
-    "steeringSpeed": 2.0,
-    "friction": 7,
-    "lateralFriction": 11,
-    "handbrakeLateralFriction": 1.8
+    "steeringSpeed": 1.6,
+    "friction": 1.4,
+    "lateralFriction": 8,
+    "handbrakeLateralFriction": 1.6
   },
   "camera": {
     "distance": 13,
