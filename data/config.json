@@ -14,7 +14,7 @@
     "reverseAccel": 10,
     "braking": 42,
     "steeringSpeed": 1.75,
-    "rollingFriction": 1.0,
+    "rollingFriction": 0.25,
     "lateralFriction": 24,
     "handbrakeLateralFriction": 1.2,
     "oversteerKick": 0.18

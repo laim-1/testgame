@@ -5,7 +5,7 @@ async function loadConfig() {
   } catch {
     return {
       city:    { gridSize: 8, blockSize: 50, roadWidth: 14, pavementWidth: 3, buildingMinHeight: 8, buildingMaxHeight: 50 },
-      vehicle: { maxSpeed: 38, reverseMaxSpeed: 10, acceleration: 22, braking: 35, steeringSpeed: 2.0, friction: 7, lateralFriction: 11, handbrakeLateralFriction: 1.8 },
+      vehicle: { maxSpeed: 36, reverseMaxSpeed: 9, acceleration: 22, reverseAccel: 10, braking: 42, steeringSpeed: 1.75, rollingFriction: 0.25, lateralFriction: 24, handbrakeLateralFriction: 1.2, oversteerKick: 0.18 },
       camera:  { distance: 13, height: 5.5, smoothing: 8 },
     };
   }
