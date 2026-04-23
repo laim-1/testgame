@@ -20,12 +20,12 @@ async function init() {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
   document.body.appendChild(renderer.domElement);
 
-  // Scene + fog
+  // Scene + fog — extended draw distance for the Torrenova map
   const scene = new THREE.Scene();
-  scene.fog = new THREE.Fog(0x8BAACC, 100, 320);
+  scene.fog = new THREE.Fog(0x85AACC, 300, 1800);
 
   // Camera
-  const camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.2, 800);
+  const camera = new THREE.PerspectiveCamera(62, window.innerWidth / window.innerHeight, 0.2, 2500);
 
   // Lighting
   scene.add(new THREE.AmbientLight(0x8899BB, 0.6));
@@ -40,6 +40,12 @@ async function init() {
   const physics   = new Physics();
   const world     = new World(scene, physics, config);
   const vehicle   = new Vehicle(scene, config);
+
+  // Spawn vehicle at world-defined start point (Downtown Heights)
+  const sp = world.spawnPoint;
+  vehicle.position.set(sp.x, 0, sp.z);
+  vehicle.mesh.position.set(sp.x, 0, sp.z);
+
   const character = new Character(scene, physics);
   const player    = new Player();
   const gameCam   = new GameCamera(camera, config);
