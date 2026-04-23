@@ -45,7 +45,6 @@ async function init() {
   const sp = world.spawnPoint;
   vehicle.position.set(sp.x, 0, sp.z);
   vehicle.mesh.position.set(sp.x, 0, sp.z);
-
   const character = new Character(scene, physics);
   const player    = new Player();
   const gameCam   = new GameCamera(camera, config);
